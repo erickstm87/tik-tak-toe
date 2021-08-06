@@ -8,11 +8,14 @@ using namespace std;
 vector<string> firstRow = {"_", "|", "_", "|", "_"};
 vector<string> secondRow = {"_", "|", "_", "|", "_"};
 vector<string> lastRow = {" ", "|", " ", "|", " "};
+vector<vector<string>> boardRows= {firstRow, secondRow, lastRow};
 
 void printBoard();
-void updateBoard(int row, int column, string playerType);
-string playerChoose();
+void playerChoose();
+bool updateBoard(int row, int column, string playerType);
 int columnConversion(int columnSelection);
+// bool checkWinner();
+bool gameOver = false;
 int boardFull = 0;
 
 int main() {
@@ -24,70 +27,62 @@ int main() {
 
 void printBoard() {
     cout << endl;
-    for(int i = 0; i < 3; i++) {
-        cout<< "    ";
-        for(int j = 0; j < 5; j++) {   
-          if(i == 2) {
-            cout << lastRow[j];
-          }
-          else if(i == 1){
-            cout << secondRow[j];
-          }
-          else if(i == 0) {
-            cout << firstRow[j]; 
-          }
+    for(int i = 0; i < boardRows.size(); i++) {
+        for(int j = 0; j < boardRows[i].size(); j++) {
+            cout << boardRows[i][j];
         }
         cout << endl;
     }
 }
 
-string playerChoose() {
+void playerChoose() {
     bool X = true;
+    string playerMark;
+    string player1, player2;
+    bool successfulTurn = false;
     while(boardFull < 9) {
         int rowChoice, columnChoice;
-
         if(X) {
-          cout << " player1 which row?" << endl;
+          playerMark = "X"
+          cout << "player1 which row?" << endl;
           cin >> rowChoice;
           cout << "player1 which column?" << endl;
-          cin >> columnChoice;
-          columnChoice = columnConversion(columnChoice);
-          X = !X;
-          updateBoard(rowChoice, columnChoice, "X");
         }
         else {
-          cout << " player2 which row?" << endl;
+          playerMark = "O"
+          cout << "player2 which row?" << endl;
           cin >> rowChoice;
           cout << "player2 which column?" << endl;
-          cin >> columnChoice;
-          X = !X;
-          columnChoice = columnConversion(columnChoice);
-          updateBoard(rowChoice, columnChoice, "O");
         }
-        boardFull++;
+        cin >> columnChoice;
+        columnChoice = columnConversion(columnChoice);
+        successfulTurn = updateBoard(rowChoice, columnChoice, playerMark);
+        if(successfulTurn) {
+          X = !X; // flip the player from 1 to 2
+          boardFull++; // only increment the turn if it was a valid selection
+        }
+        else {
+            cout << "please enter valid values" << endl;
+            continue;
+        }
     }
-    return "something";
 }
 
-void updateBoard(int row, int column, string playerType) {
-    switch(row) { 
-      case(1):
-        firstRow[column] = playerType;
+bool updateBoard(int row, int column, string playerType) {
+    bool goodTurn = false;
+    vector<string> rowSelected;
+    row-=1;
+    if((boardRows[row][column] == "_" || boardRows[row][column] == " ") && row <= 2) {
+        boardRows[row][column] = playerType;
+
         printBoard();
-        break;
-      case(2):
-        secondRow[column] = playerType;
-        printBoard();
-        break;
-      case(3):
-        lastRow[column] = playerType;
-        printBoard();
-        break;
-      default:
-        cout << "please choose one, two, or three" << endl;
-        break;
+        goodTurn = true;
     }
-    return;
+    else {
+        cout << "that spot is taken" << endl;
+    }
+
+    return goodTurn;
 }
 
 int columnConversion(int columnSelection) {
@@ -102,8 +97,13 @@ int columnConversion(int columnSelection) {
           columnSelection = 4;
           break;
         default:
-          cout << "please select something valid";
+          cout << "please select something valid" << endl;
           break;
     }
     return columnSelection;
 }
+
+// bool checkWinner() {
+//     if()
+//     return false;
+// }
