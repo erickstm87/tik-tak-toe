@@ -149,12 +149,19 @@ bool checkColumn(string playerMark) {
 }
 
 bool checkDiagonal(string playerMark) {
-  // check left to right
-  if(boardRows[0][0] == playerMark && boardRows[1][2] == playerMark && boardRows[2][4] == playerMark) {
-      gameOver = true;
+  int counter = 0;
+  for(int i = 0; i < boardRows.size(); i++) {
+      if(boardRows[i][0] == playerMark) {
+          counter += 1;
+      }
+      else if(boardRows[i][2] == playerMark) {
+          counter += 1;
+      }
+      else if(boardRows[i][4] == playerMark) {
+          counter += 1;
+      }
   }
-  // check right to left
-  else if(boardRows[0][4] == playerMark && boardRows[1][2] == playerMark && boardRows[2][0] == playerMark) {
+  if(counter == 3) {
       gameOver = true;
   }
   return gameOver;
