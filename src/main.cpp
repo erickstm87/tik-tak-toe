@@ -17,7 +17,7 @@ int columnConversion(int columnSelection);
 int boardFull = 0;
 bool gameOver = false;
 bool checkRow(string playerMark);
-bool checkColumn(string playerMark);
+bool checkColumn();
 bool checkDiagonal(string playerMark);
 
 int main() {
@@ -65,7 +65,7 @@ void playerChoose() {
           X = !X; // flip the player from 1 to 2
           boardFull++; // only increment the turn if it was a valid selection
           checkRow(playerMark);
-          checkColumn(playerMark);
+          checkColumn();
           checkDiagonal(playerMark);
         }
         
@@ -129,40 +129,27 @@ bool checkRow(string playerMark) {
   return gameOver;
 }
 
-bool checkColumn(string playerMark) {
-  int counter = 0;
-  for(int i = 0; i < boardRows.size(); i++) {
-      if(boardRows[i][0] == playerMark) {
-          counter += 1;
-      }
-      else if(boardRows[i][1] == playerMark) {
-          counter += 1;
-      }
-      else if(boardRows[i][2] == playerMark) {
-          counter += 1;
-      }
+bool checkColumn() {
+  if(boardRows[0][0] == boardRows[1][0] && boardRows[1][0] == boardRows[2][0]) {
+      gameOver = true;
   }
-  if(counter == 3) {
+  else if(boardRows[0][2] == boardRows[1][2] && boardRows[1][2] == boardRows[2][2]) {
+      gameOver = true;
+  }
+  else if(boardRows[0][4] == boardRows[1][4] && boardRows[1][4] == boardRows[2][4]) {
       gameOver = true;
   }
   return gameOver;
 }
 
 bool checkDiagonal(string playerMark) {
-  int counter = 0;
-  for(int i = 0; i < boardRows.size(); i++) {
-      if(boardRows[i][0] == playerMark) {
-          counter += 1;
-      }
-      else if(boardRows[i][2] == playerMark) {
-          counter += 1;
-      }
-      else if(boardRows[i][4] == playerMark) {
-          counter += 1;
-      }
-  }
-  if(counter == 3) {
-      gameOver = true;
-  }
+    if(boardRows[0][0] == playerMark && boardRows[1][2] == playerMark && boardRows[2][4] == playerMark) {
+        cout << "this is selected column 1" << endl;
+        gameOver = true;
+    }
+    else if(boardRows[0][4] == playerMark && boardRows[1][2] == playerMark && boardRows[2][0] == playerMark) {
+        cout << "this is selected column 1" << endl;
+        gameOver = true;
+    }
   return gameOver;
 }
